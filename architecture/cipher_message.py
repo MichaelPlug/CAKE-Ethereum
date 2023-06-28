@@ -103,9 +103,9 @@ def main(message, entries, access_policy, sender):
         hash_file = api.add_json(final_message)
         print(f'ipfs hash: {hash_file}')
 
-        block_int.send_MessageIPFSLink(sender, sdm_private_key, message_id, hash_file)
+        tx_id = block_int.send_MessageIPFSLink(sender, sdm_private_key, message_id, hash_file)
 
-        return message_id
+        return message_id, hash_file, [], tx_id
 
     else:
         now = datetime.now()
@@ -114,7 +114,7 @@ def main(message, entries, access_policy, sender):
         message_dict = json.loads(message)
         entries = entries.split('###')
         decoded = [ast.literal_eval(y) for y in entries]
-
+        final_slices = []
         final_messages_parts = []
         for i, entry in enumerate(decoded):
             json_file_ciphered = {}
@@ -123,6 +123,7 @@ def main(message, entries, access_policy, sender):
             slice_id = random.randint(1, 2 ** 64)
             print(f'slice id: {slice_id}')
             slices.append(slice_id)
+            final_slices.append(slice_id)
 
             salt_message = []
 
@@ -164,6 +165,6 @@ def main(message, entries, access_policy, sender):
         hash_file = api.add_json(final_message)
         print(f'ipfs hash: {hash_file}')
 
-        block_int.send_MessageIPFSLink(sdm_address, sdm_private_key, sender, message_id, hash_file)
+        tx_id = block_int.send_MessageIPFSLink(sdm_address, sdm_private_key, sender, message_id, hash_file)
 
-        return message_id
+        return message_id, hash_file, final_slices, tx_id
