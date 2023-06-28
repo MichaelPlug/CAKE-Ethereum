@@ -65,9 +65,9 @@ class CAKEDataOwner(CAKEBridge):
                 tx_id = received_messages[3][len_initial_message:]
                 #return message_id, ipfs_link, slices, tx_id
                 conn = psycopg2.connect(
-                    host="172.18.0.3",
+                    host="172.18.0.2",
                     port = 5432,
-                    database="postgres",
+                    database="cake-db",
                     user="root",
                     password="root"
                 )

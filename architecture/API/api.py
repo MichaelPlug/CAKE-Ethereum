@@ -187,10 +187,14 @@ def cipher():
         return "Missing parameters" , 400
     if len(policy) == 0:
         return "Missing parameters" , 400
-    
     #TODO: Check if it is mandatory
     if len(entries) != len(policy):
-        return "Entries and policy legth doesn't match" , 400   
+        print("Entries and policy legth doesn't match")
+        print("Entries: " + str(len(entries)))
+        print(entries)
+        print("Policy: " + str(len(policy)))
+        print(policy)
+        return "Entries and policy legth doesn't match" , 400  
 
     entries_string = '###'.join(str(x) for x in entries)
     policy_string = '###'.join(str(x) for x in policy)
@@ -200,7 +204,6 @@ def cipher():
         row_id = -1
     else:
         row_id = int(row_id)
-    
     data_owner = CAKEDataOwner(process_instance_id=request.json.get('process_id'), row_id=row_id)
     data_owner.cipher_data(message, entries_string, policy_string)
     return "Cipher completed"

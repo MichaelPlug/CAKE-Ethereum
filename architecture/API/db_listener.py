@@ -4,13 +4,12 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import time
 import json
 import requests
-import codecs
 
 def listen_for_trigger_events():
     conn = psycopg2.connect(
-        host="172.18.0.3",
+        host="172.18.0.2",
         port = 5432,
-        database="postgres",
+        database="cake-db",
         user="root",
         password="root"
     )
@@ -70,12 +69,12 @@ def process_insert_event(payload):
     print("Data: ", data)
 
     #TODO: Comminicate with API
-    response = requests.post("http://localhost:8888/dataOwner/handshake", json=data)
+    #response = requests.post("http://localhost:8888/dataOwner/handshake", json=data)
     #print(response)
     conn = psycopg2.connect(
-        host="172.18.0.3",
+        host="172.18.0.2",
         port = 5432,
-        database="postgres",
+        database="cake-db",
         user="root",
         password="root"
     )
@@ -96,9 +95,9 @@ def process_insert_event(payload):
 
     #TODO: Update the database
     conn = psycopg2.connect(
-        host="172.18.0.3",
+        host="172.18.0.2",
         port = 5432,
-        database="postgres",
+        database="cake-db",
         user="root",
         password="root",
     )
@@ -106,7 +105,7 @@ def process_insert_event(payload):
     curs.execute('UPDATE public."CAKE-1" SET "Status" = ' + "'Ciphered'" + ' WHERE "ID" ='  + str(res["ID"]))
     conn.commit()
     curs.close()
-    print("Updated the database to Ready")
+    print("Updated the database to Ciphered")
     
 
 def process_update_event(payload):
