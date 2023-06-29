@@ -113,7 +113,6 @@ def handle_client(conn, addr):
             if message[0] == "Cipher this message":
                 if check_handshake(message[4], message[5]):
                     message_id, ipfs_link, slices, tx_id = cipher(message)
-                    print("SlicesX: ", slices)
                     conn.send(b'Here is the message_id: ' + str(message_id).encode() 
                               + b"\n" + b'Here is the ipfs_link: ' + str(ipfs_link).encode()
                               + b"\n" + b'Here are the slices: ' + str(slices).encode()

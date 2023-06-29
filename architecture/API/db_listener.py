@@ -6,7 +6,7 @@ import json
 import requests
 
 TIME_TO_SLEEP = 0.1
-HOST_IP = "172.18.0.2"
+HOST_IP = "172.18.0.3"
 
 def listen_for_trigger_events():
     conn = psycopg2.connect(
