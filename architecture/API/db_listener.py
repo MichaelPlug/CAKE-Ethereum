@@ -5,9 +5,12 @@ import time
 import json
 import requests
 
+TIME_TO_SLEEP = 0.1
+HOST_IP = "172.18.0.2"
+
 def listen_for_trigger_events():
     conn = psycopg2.connect(
-        host="172.18.0.2",
+        host=HOST_IP,
         port = 5432,
         database="cake-db",
         user="root",
@@ -29,7 +32,7 @@ def listen_for_trigger_events():
                 process_insert_event(notify.payload)
             elif notify.channel == "update_a_row_notification":
                 process_update_event(notify.payload)
-        time.sleep(10)
+        time.sleep(TIME_TO_SLEEP)
     
     curs.close()
     conn.close()
@@ -72,7 +75,7 @@ def process_insert_event(payload):
     #response = requests.post("http://localhost:8888/dataOwner/handshake", json=data)
     #print(response)
     conn = psycopg2.connect(
-        host="172.18.0.2",
+        host=HOST_IP,
         port = 5432,
         database="cake-db",
         user="root",
@@ -95,7 +98,7 @@ def process_insert_event(payload):
 
     #TODO: Update the database
     conn = psycopg2.connect(
-        host="172.18.0.2",
+        host=HOST_IP,
         port = 5432,
         database="cake-db",
         user="root",
