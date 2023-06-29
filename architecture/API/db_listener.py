@@ -7,6 +7,7 @@ import requests
 
 TIME_TO_SLEEP = 0.1
 HOST_IP = "172.18.0.3"
+CHECK_ALREDY_READY = True
 
 def listen_for_trigger_events():
     conn = psycopg2.connect(
@@ -18,10 +19,16 @@ def listen_for_trigger_events():
     )
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     curs = conn.cursor()
+
+    # Make a query to get all the rows that are already in the database with status Ready
     
     # Enable LISTEN/NOTIFY for the trigger events
     curs.execute("LISTEN update_a_row_notification;")
     curs.execute("LISTEN update_notification;")
+
+    if CHECK_ALREDY_READY:
+        curs.execute('UPDATE public."CAKE-1" SET "Status"='+"'Ready'" +'WHERE "Status"='+"'Ready';")
+        conn.commit()
     print("Waiting for trigger events...")
     # TODO: Check if some Ready rows are already in the database
     while True:
@@ -36,6 +43,7 @@ def listen_for_trigger_events():
     
     curs.close()
     conn.close()
+
 
 def process_insert_event(payload):
     # Process the payload received from the trigger event
@@ -142,11 +150,7 @@ def process_update_event(payload):
         print("All processes are done.")
         return
 
-def process_trigger_event(payload):
-    # Process the payload received from the trigger event
-    # You can implement your custom logic here
-    print("Received trigger event:\n", payload)
-    print("Type of payload: ", type(payload))
-
 # Start listening for trigger events
 listen_for_trigger_events()
+
+
